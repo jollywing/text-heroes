@@ -126,11 +126,12 @@ void ScriptEngine::ExecuteScriptLine( char * stScriptLine, CGame *pGameEngine )
 	nIndexInCurLine = 0;
 
 	// 读取命令
-	char stCommand[ 32 ];
+	char stCommand[SCRIPT_CMD_LEN];
 	ReadSubString( stScriptLine, stCommand );
 
-	char stStringBuffer[256];
-	char stNumberBuffer[4];
+	char stStringBuffer[SCRIPT_LINE_LEN];
+	char stNumberBuffer[SCRIPT_NUM_BUF_LEN];
+    char stVarNameBuffer[SCRIPT_VAR_BUF_LEN];
 
     // 返回
 	if (! strcmp( stCommand, "RETURN" )) {
@@ -396,6 +397,59 @@ void ScriptEngine::ExecuteScriptLine( char * stScriptLine, CGame *pGameEngine )
 		short nRoleIdx = atoi( stNumberBuffer );
         pGameEngine->Refresh(nRoleIdx);
     }
+
+    //格式：	IF variable value
+	//			...
+	//			ENDIF
+	else if ( !strcmp(stCommand, "IF")){
+        if (Expression())
+            branchStack.push(1);
+        else {
+            branchStack.push(0);
+            GotoNextBranch();
+        }
+    }
+
+    else if (!strcmp(stCommand, "ELSEIF"))
+	{
+        if(branchStack.top())
+            GotoBranchEnd();
+        else if(Expression()){
+            branchStack.pop();
+            branchStack.push(1);
+        }
+        else
+            GotoNextBranch();
+	}
+
+    else if (!strcmp(stCommand, "ELSE"))
+	{
+        if(branchStack.top())
+            GotoBranchEnd();
+	}
+
+    else if (!strcmp(stCommand, "ENDIF"))
+        branchStack.pop();
+
+	//格式：	ADDVAR variable [value]
+	else if(! strcmp(stCommand, "CREATEVAR"))
+	{
+		ReadSubString(stScriptLine, stVarNameBuffer);
+		ReadSubString(stScriptLine, stNumberBuffer);
+		if( strcmp(stNumberBuffer, ""))	//如果value不为空
+			CreateVar( stVarNameBuffer, atoi(stNumberBuffer));
+		else
+			CreateVar(stVarNameBuffer);
+	}
+
+    //格式：	SET variable value
+	else if(!strcmp(stCommand, "SET"))
+	{
+		ReadSubString(stScriptLine, stVarNameBuffer);
+		ReadSubString(stScriptLine, stNumberBuffer);
+		SetVar(stVarNameBuffer, atoi(stNumberBuffer) );
+	}
+
 }
 
 /* read a sub string from a string */
@@ -426,4 +480,148 @@ void ScriptEngine::ReadSubString( char * stString, char * stSubString )
 
 	stSubString[ nIndex ] = '\0';
 
+}
+
+// return 0 when success, return -1 when fail
+char ScriptEngine::GotoBranchEnd()
+{
+    short nested = 0;	//防止if的嵌套
+    char szCommand[SCRIPT_CMD_LEN];
+    while(1)
+    {
+        ++ nCurLineIndex;
+        if(nCurLineIndex >= nScriptLineNumber){
+            while(!branchStack.empty())
+                branchStack.pop();
+            iRunningScripts = false;
+            cout << "There must be some error with your script!" ;
+            return -1;
+        }
+
+        nIndexInCurLine = 0;
+        ReadSubString( pScripts[nCurLineIndex].stScriptLine, szCommand);
+        if (!strcmp(szCommand, "IF"))
+            nested +=1;
+        else if (!strcmp(szCommand, "ENDIF") )
+        {
+            if(nested > 0)
+                nested -= 1;
+            else break;
+        }
+    }
+    --nCurLineIndex;
+    return 0;
+}
+
+char ScriptEngine::GotoNextBranch()
+{
+    short nested = 0;	//防止if的嵌套
+    char szCommand[SCRIPT_CMD_LEN];
+    while(1)
+    {
+        ++ nCurLineIndex;
+        if(nCurLineIndex >= nScriptLineNumber){
+            while(!branchStack.empty())
+                branchStack.pop();
+            iRunningScripts = false;
+            cout << "There must be some error with your script!" ;
+            return -1;
+        }
+
+        nIndexInCurLine = 0;
+        ReadSubString( pScripts[nCurLineIndex].stScriptLine, szCommand);
+        if (!strcmp(szCommand, "IF"))
+            nested +=1;
+        else if (!strcmp(szCommand, "ENDIF") )
+        {
+            if(nested > 0)
+                nested -= 1;
+            else break;
+        }
+        else if( !strcmp(szCommand, "ELSEIF") ||
+                 !strcmp(szCommand, "ELSE"))
+        {
+            if (nested == 0)	break;
+        }
+    }
+    --nCurLineIndex;
+    return 0;
+}
+
+bool ScriptEngine::Expression()
+{
+	char szLHS[SCRIPT_VAR_BUF_LEN];
+	ReadSubString( pScripts[nCurLineIndex].stScriptLine, szLHS);
+	short nLHS = GetVar(szLHS);
+
+	char szOP[SCRIPT_NUM_BUF_LEN];
+	ReadSubString( pScripts[nCurLineIndex].stScriptLine, szOP);
+
+	char szRHS[SCRIPT_VAR_BUF_LEN];
+	ReadSubString( pScripts[nCurLineIndex].stScriptLine, szRHS);
+	short nRHS = atoi(szRHS);
+
+	if (!strcmp( szOP, "="))
+		return nLHS == nRHS;
+	else if ( !strcmp(szOP, ">"))
+		return nLHS > nRHS;
+	else if ( !strcmp(szOP, "<"))
+		return nLHS < nRHS;
+	else
+		return false;
+
+}
+
+void ScriptEngine::ClearVars()
+{
+	for( int i=0; i< VAR_COUNT; ++i)
+	{
+		strcpy( vars[i].szName, "");
+	}
+}
+
+short ScriptEngine::GetVar(const char * szName )
+{
+	for( int i=0; i< VAR_COUNT; ++i)
+	{
+		if ( ! strcmp(vars[i].szName, szName))
+			return vars[i].nValue;
+	}
+	return -1;
+}
+
+bool ScriptEngine::SetVar(const char * szName, short nValue)
+{
+	for( int i=0; i<VAR_COUNT; ++i)
+	{
+		if ( ! strcmp(vars[i].szName, szName)){
+			vars[i].nValue = nValue;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool ScriptEngine::IsVarExist(char * szName )
+{
+	for( int i=0; i< VAR_COUNT; ++i)
+	{
+		if ( ! strcmp(vars[i].szName, szName))
+			return true;
+	}
+	return false;
+}
+
+bool ScriptEngine::CreateVar(char * szName, short nValue /* = 0 */)
+{
+	for( int i=0; i< VAR_COUNT; ++i)
+	{
+		if ( ! strcmp(vars[i].szName, ""))
+		{
+			strcpy(vars[i].szName, szName);
+			vars[i].nValue = nValue;
+			return true;
+		}
+	}
+	return false;
 }

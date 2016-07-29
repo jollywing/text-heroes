@@ -237,4 +237,3 @@ ADD_NPC	3	2
 SET_FLAG	0	2	//有关林平之的任务完成
 CONTINUE
 RETURN
-
