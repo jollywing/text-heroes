@@ -1,0 +1,240 @@
+#	[0. 游戏结束]
+PRINT	你的人生像流星一样短暂。人在江湖漂，谁能不挨刀，从你出来闯荡的那天开始，你就做好了这样的心理准备。。。
+PRINT	游戏结束!
+RETURN
+
+#	[1. 高升客栈武师]
+QUEST_JUMP 0 0 2        [如果还没有接收到黑狼任务]
+QUEST_JUMP 0 1 4        [如果接受了，检查是否完成]
+TRADE                   [如果已经完成就不问了，进行交易]
+RETURN
+
+#    [2. 高升客栈武师黑狼皮任务]
+TALK 1 如果少侠能够帮我找到三张黑狼皮，必有重谢！黑狼经常在回部出没，愿意帮忙吗？
+YES_NO
+EQ_JUMP 0 1 3   [如果答应了，则跳转到接受任务的脚本]
+TRADE           [如果不答应，则进行交易]
+RETURN
+
+#       [3. 接受黑狼皮任务]
+PRINT 你接受了任务：三张黑狼皮
+SET_FLAG 0 1
+RETURN
+
+#       [4. 如果还没完成黑狼皮任务]
+HAVE_JUMP 0 12 3 5
+TALK 1 少侠别忘了帮我找黑狼皮啊。
+TRADE
+RETURN
+
+#       [5. 如果已经完成黑狼皮任务]
+TALK 1 太感谢你了少侠！
+PRINT 完成黑狼皮任务
+DEL_GOODS 0 12
+DEL_GOODS 0 12
+DEL_GOODS 0 12
+TALK 1 这是给少侠的酬劳。
+ADD_GOODS 0 3
+ADD_GOODS 0 1
+ADD_GOODS 0 2
+SET_FLAG 0 2
+RETURN
+
+#       [6. 有一定的概率掉落黑狼皮]
+RANDOM_DROP 12 50
+RETURN
+
+#       [7. 客栈掌柜]
+TALK 18 客官，要住店吗？50文钱吃好喝好睡好啊。
+YES_NO
+EQ_JUMP 0 1 8
+RETURN
+
+#       [8. REFRESH]
+DEL_MONEY 0 50
+EQ_JUMP 1 0 9   [如果钱足够]
+TALK 18 没钱住什么店啊，一边玩去！
+RETURN
+
+#       [9. 回复体力]
+PRINT 经过充分的休息，精力充沛！
+REFRESH 0
+RETURN
+
+#       [10. 侯人杰]
+QUEST_JUMP 1 1 11        [如果已经接受了送信任务]
+QUEST_JUMP 1 2 12        [如果已经完成了送信任务]
+TALK 4 一看少侠就是同道中人，可否帮在下把这封情书带给峨嵋派周芷若姑娘？
+YES_NO
+EQ_JUMP 0 1 13   [如果接受送信任务]
+TALK 4 峨嵋的妹妹真是漂亮啊，就是没人成全。
+RETURN
+
+#       [11. 已经接受了侯人杰的送信任务]
+EQ_JUMP 10 1 14         [周芷若已经看过侯人杰的情书]
+TALK 4 少侠请早点把我的信送给周姑娘！
+RETURN
+
+#       [12. 已经完成了情书任务]
+PRINT 他装作不认识你，对你不理不睬。
+RETURN
+
+#       [13. 接受侯人杰的情书任务]
+PRINT 你接受了任务，侯人杰的情书
+SET_FLAG 1 1
+ADD_GOODS 0 13
+TALK 4 一切拜托少侠了！
+RETURN
+
+#       [14. 周芷若已经看过侯人杰的情书]
+TALK 4 看来我所托非人啊，以后别让我看到你。这是给你的酬劳！
+ADD_GOODS 0 4
+ADD_MONEY 0 200
+SET_FLAG 1 2
+PRINT 已完成任务：侯人杰的情书
+RETURN
+
+#       [15. 周芷若]
+HAVE_JUMP 0 13 1 16     [如果有候人杰的情书在身上]
+PRINT 她看都不看你。
+RETURN
+
+#       [16. 周芷若看侯人杰的情书]
+PRINT 你将侯人杰情书交给周芷若。
+DEL_GOODS 0 13
+PRINT 周芷若匆匆掠了两眼，就把情书撕了个粉碎。
+SET_VAR 10 1
+TALK 10 无耻之徒！你怎么还帮他？
+PRINT 周芷若扇了你一个耳光，让你走开。
+PRINT 别跟那女人计较，去回复侯人杰吧。
+RETURN
+
+#       [17.灭绝师太]
+QUEST_JUMP 3 0 18        [如果还没接受教训欧阳克的任务]
+QUEST_JUMP 3 1 20        [如果已经接受了教训欧阳克的任务]
+TALK 11 年轻人，有什么事吗？
+RETURN
+
+#    [18. 灭绝委托教训欧阳克的任务]
+TALK 11 欧阳克这个淫贼，隔三岔五来峨嵋糟蹋女孩子，少侠可否出手教训他一下？
+YES_NO
+EQ_JUMP 0 1 19   [如果接受教训欧阳克的任务]
+TALK 11 世风日下啊，年轻人怎么这么没有侠义精神？
+RETURN
+
+#       [19. 接受教训欧阳克的任务]
+TALK 11 年轻人就该这样！
+PRINT 你接受了任务：教训欧阳克
+SET_FLAG 3 1
+RETURN
+
+#       [20. 如果已经接受了教训欧阳克的任务]
+EQ_JUMP 11 1 21         [已经教训了欧阳克]
+TALK 11 年轻人，等你的好消息。
+RETURN
+
+#       [21. 已经教训了欧阳克]
+TALK 11 少侠果然年少有为啊，请收下这些吧。
+ADD_GOODS 0 5
+ADD_GOODS 0 7
+PRINT 完成任务：教训欧阳克
+SET_FLAG 3 2
+RETURN
+
+#       [22. 欧阳克]
+QUEST_JUMP 3 1 23       [如果要教训欧阳克]
+TALK 12 小兄弟，一起过来娱乐一下吧？
+RETURN
+
+#       [23. 教训欧阳克]
+TALK 0 淫贼，让少爷教训教训你！
+TALK 12 奶奶的，老子喜欢美女关你鸟事！
+FIGHT 12
+RETURN
+
+#     [24. 欧阳克失败]
+QUEST_JUMP 3 1 25
+RETURN
+
+#       [25. 成功教训了欧阳克]
+TALK 12 少侠手下留情，这些钱你拿去用吧。
+ADD_MONEY 0 300
+SET_VAR 11 1
+PRINT 成功教训了欧阳克，回去向灭绝汇报吧。
+RETURN
+
+#       [26. 家]
+CLEAR
+PRINT 回到自己的家真是温馨啊，要休息一下吗？
+YES_NO
+EQ_JUMP 0 1 9
+RETURN
+
+
+#       //5 掉落华山剑谱
+RAND0M_DROP 6 90
+RETURN
+
+#       //6 掉落昆仑秘剑录
+RANDOM_DROP 9 50
+RETURN
+
+#       //7 掉落太极剑谱
+RANDOM_DROP 10 100
+RETURN
+
+
+#	//1	add npc
+ADD_GOODS	2	//狼肉
+RETURN
+
+#	//3	岳不群(1)的任务
+TEST_JUMP	0	1	4	//如果已经接受了任务0，则跳转到2号脚本
+TEST_JUMP	0	2	5	//如果已经完成了任务0，则跳转到3号脚本
+TALK	1	少侠，岳某听闻青城余沧海率弟子血洗福威镖局，并派弟子监禁林平之，此举有违侠义之道，少侠可否援手搭救林平之，也好匡扶人间正气。
+TALK	0	好，交给我了。
+TALK	1	如此，岳某静候佳音。
+PRINT	你把这件事记了下来。
+SET_FLAG	0	1		//表明已经接受任务0
+PAUSE
+CONTINUE
+RETURN
+
+#	//4	岳不群(1)的任务(accpted)
+TALK	1	少侠可是将林平之搭救出来了？
+CONTINUE
+RETURN
+
+#	//5	岳不群(1)的任务(completed)
+TALK	1	华山上下都会记住少侠的援手之恩，有需要岳某尽力之处少侠但说无妨。
+TALK	0	岳掌门不必客气。
+CONTINUE
+RETURN
+
+#	//6	侯人杰(2)
+TEST_JUMP	0	1	7	//如果已经接受了救林平之的任务，则跳转到5号脚本
+TALK	2	小子，没事别总在这晃悠！
+CONTINUE
+RETURN
+
+#	//7	侯人杰(2)
+TALK	2	小子，没事别总在这晃悠！
+TALK	0	小爷今天就是来教训你们这些恶人的！
+TALK	2	看你是活得不耐烦了，让大爷来教训教训你！
+FIGHT	2
+RETURN
+
+#	//8	侯人杰(2) 被打败
+TEST_JUMP	0	1	9	//如果接受了任务被打败，执行7号脚本
+TALK	2	要不是大爷身体不舒服，你怎么能打败我？
+CONTINUE
+RETURN
+
+#	//9	侯人杰(2) 被打败,将逃回青城派
+TALK	2	我回去告诉师父，小兔崽子竟敢和我们捣乱！
+REMOVE_NPC	21	2
+ADD_NPC	3	2
+SET_FLAG	0	2	//有关林平之的任务完成
+CONTINUE
+RETURN
+

@@ -1,0 +1,12 @@
+
+#
+data/skills.dat		//技能
+data/goods.dat		//物品
+data/npcs.dat		//人物
+data/spots.dat		//场景
+data/quests.dat		//任务
+data/scripts.dat	//脚本
+data/map.dat		//地图
+data/logo.dat		//标题
+data/nick.dat       //绰号
+

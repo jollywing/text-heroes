@@ -1,0 +1,170 @@
+#	//0
+《基本剑法》	//name
+关于怎样用剑的入门书籍。	//desc
+2	//property, learnable
+0 0 0	//attack, defend, speed
+0 0 0 0	//hp, maxHp, mp, maxMp
+0	//skill index
+-1	//location
+50	//cost
+
+#	//1
+小还丹	//name
+可恢复少许内力。	//desc
+0	//property, eatable
+0 0 0	//attack, defend, speed
+0 0 50 0	//hp, maxHp, mp, maxMp
+-1	//skill index
+-1	//location
+25	//cost
+
+#	//2
+金疮药	//name
+治外伤的良药。	//desc
+0	//property, eatable
+0 0 0	//attack, defend, speed
+100 0 0 0	//hp, maxHp, mp, maxMp
+-1	//skill index
+-1	//location
+10	//cost
+
+#   //3
+《青萍剑谱》        //name
+记载着青萍剑法。        //desc
+2             //property, learnable
+0 0 0         //attack, defend, speed
+0 0 0 0       //hp, maxhp, mp, maxmp
+1   //skill index
+-1  //location
+200     //cost
+
+#   //4
+《松风剑谱》        //name
+记载着青城派的松风剑法。        //desc
+2             //property, learnable
+0 0 0         //attack, defend, speed
+0 0 0 0       //hp, maxhp, mp, maxmp
+2   //skill index
+-1  //location
+400     //cost
+
+#	//5
+《一字电剑》	//name
+记载着以凌厉著称的一字电剑。	//desc
+2	//property: learnable
+0 0 0	//attack, defend, speed
+0 0 0 0	//hp, maxHp, mp, maxMp
+3	//skill index
+-1	//location: head
+800	//cost
+
+#	//6
+《华山剑谱》	//name
+记载着经典的华山剑法。	//desc
+2	//property: learnable
+0 0 0	//attack, defend, speed
+0 0 0 0	//hp, maxHp, mp, maxMp
+4	//skill index
+-1	//location: head
+1200	//cost
+
+#	//7
+大还丹	//name
+可恢复大量内力。	//desc
+0	//property, eatable
+0 0 0	//attack, defend, speed
+0 0 100 0	//hp, maxHp, mp, maxMp
+-1	//skill index
+-1	//location
+80	//cost
+
+#	//8
+大金创药	//name
+可恢复大量生命。	//desc
+0	//property, eatable
+0 0 0	//attack, defend, speed
+200 0 0 0	//hp, maxHp, mp, maxMp
+-1	//skill index
+-1	//location
+50	//cost
+
+#	//9
+《昆仑秘剑录》	//name
+其中有昆仑派的绝学：两仪剑法。	//desc
+2	//property: learnable
+0 0 0	//attack, defend, speed
+0 0 0 0	//hp, maxHp, mp, maxMp
+5	//skill index
+-1	//location: head
+2200	//cost
+
+#	//10
+《太极剑谱》	//name
+以慢打快，无招胜有招，是为太极。	//desc
+2	//property: learnable
+0 0 0	//attack, defend, speed
+0 0 0 0	//hp, maxHp, mp, maxMp
+7	//skill index
+-1	//location: head
+4000	//cost
+
+#	//11
+《连城诀》	//name
+连城剑法！牛逼得很！	//desc
+2	//property: learnable
+0 0 0	//attack, defend, speed
+0 0 0 0	//hp, maxHp, mp, maxMp
+8	//skill index
+-1	//location: head
+10000	//cost
+
+#	//12
+黑狼皮	//name
+任务物品。	//desc
+3	//property, eatable
+0 0 0	//attack, defend, speed
+0 0 0 0	//hp, maxHp, mp, maxMp
+-1	//skill index
+-1	//location
+100	//cost
+
+#	//13
+侯人杰的情书	//name
+候人杰给周芷若的情书，偷看不太好吧。	//desc
+3	//property, eatable
+0 0 0	//attack, defend, speed
+0 0 0 0	//hp, maxHp, mp, maxMp
+-1	//skill index
+-1	//location
+0	//cost
+
+#	//4
+布衣	//name
+最普通的衣服。	//desc
+1	//property, equipable
+0 2 0	//attack, defend, speed
+0 0 0 0	//hp, maxHp, mp, maxMp
+-1	//skill index
+1	//location:body
+10	//cost
+
+#	//5
+草鞋	//name
+最烂的鞋。	//desc
+1	//property, equipable
+0 0 1	//attack, defend, speed
+0 0 0 0	//hp, maxHp, mp, maxMp
+-1	//skill index
+3	//location: foot
+5	//cost
+
+#	//0
+狼肉	//name
+可恢复少许生命。	//desc
+0	//property, eatable
+0 0 0	//attack, defend, speed
+50 0 0 0	//hp, maxHp, mp, maxMp
+-1	//skill index
+-1	//location
+20	//cost
+
